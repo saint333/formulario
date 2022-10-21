@@ -1,0 +1,7 @@
+export const HOME = "/"
+export const LOGIN = "/login"
+export const PRIVADO = "/app"
+export const NOFOUND = "*"
+export const SAMI = "https://www.samishop.pe/"
+export const PRUEBA = "/prueba"
+export const LOGOUT = "/app/logout"

@@ -1,0 +1,24 @@
+.navbar-nav .nav-link{
+    position: relative;
+}
+div.navbar-nav .nav-link.active,.navbar-nav .nav-link:hover{
+    color: #a6b739;
+}
+.navbar-nav .nav-link.active::before,.navbar-nav .nav-link::before{
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 51%;
+    right: 51%;
+    bottom: 0;
+    background: #a6b739;
+    height: 3px;
+    transition-property: left, right;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+}
+.navbar-nav .nav-link.active:hover::before,.navbar-nav .nav-link.active::before,.navbar-nav .nav-link:hover::before{
+    left: 0;
+    right: 0;
+    z-index: 0;
+}
