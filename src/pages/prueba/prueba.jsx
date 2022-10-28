@@ -1,8 +1,8 @@
 function Prueba() {
     return (
-        <main>
+        <>
             prueba
-        </main>
+        </>
     )
 }
 

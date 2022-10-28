@@ -1,4 +1,5 @@
 import "./login.css";
+import { Link } from "react-router-dom";
 import Logo from "../../assets/IMG_LOGO_SAMISHOP2022.png";
 import Card from "react-bootstrap/Card";
 import Figure from "react-bootstrap/Figure";
@@ -7,6 +8,7 @@ import { useState } from "react";
 import  Button  from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner"
 import { useAuthContext } from "../../config/authentication/authentication";
+import { RCPASS } from "../../config/routes/paths";
 
 function Login() {
     const [emailId, setEmailId] = useState("")
@@ -16,29 +18,30 @@ function Login() {
     const [cargar, setCargar] = useState("d-none")
     const { login, entrar } = useAuthContext()
     
-    const enviarData = (e) => {
+    const enviarData = async (e) => {
+        setCargar("mx-3")
         e.preventDefault()
-        const respuesta = login(email, password)
-        if (respuesta.email && respuesta.password) {
+        const respuesta = await login(email, password)
+        if (respuesta.body.correo === email && respuesta.body.password === password) {
             setEmailId("is-valid")
             setPasswordId("is-valid")
             setCargar("mx-3")
             setTimeout(() => {
                 setCargar("d-none")
-                entrar()
-            }, 2000);
+                entrar(respuesta.body)
+            }, 2000); 
         }
-        if (respuesta.email === false && respuesta.password === false) {
+        if (respuesta.body.correo !== email && respuesta.body.password !== password) {
             setEmailId("is-invalid")
             setPasswordId("is-invalid")
             setCargar("d-none")
         }
-        if (respuesta.email === false && respuesta.password) {
+        if (respuesta.body.correo !== email && respuesta.body.password === password) {
             setEmailId("is-invalid")
             setPasswordId("is-valid")
             setCargar("d-none")
         }
-        if (respuesta.email && respuesta.password === false) {
+        if (respuesta.body.correo === email && respuesta.body.password !== password) {
             setEmailId("is-valid")
             setPasswordId("is-invalid")
             setCargar("d-none")
@@ -92,6 +95,9 @@ function Login() {
                             <Button type="submit" variant="sami" className="w-100">Iniciar Sesión <Spinner animation="border" variant="light" size="sm" className={cargar}/></Button>
                         </Form.Group>
                     </Form>
+                    <div className="w-100 text-center">
+                        <Link to={RCPASS}>Olvide mi contraseña</Link>
+                    </div>
                 </Card.Body>
             </Card>
         </div>

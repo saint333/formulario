@@ -4,13 +4,14 @@ import Home from "./app/home/home";
 import Logou from "./app/logout/logout";
 import NavbarDefauld from "./components/navbar/navbar";
 import AuthContextProvider from "./config/authentication/authentication";
-import { HOME, LOGIN, LOGOUT, NOFOUND, PRIVADO, PRUEBA } from "./config/routes/paths";
+import { HOME, LOGIN, LOGOUT, NOFOUND, PRIVADO, PRUEBA, RCPASS } from "./config/routes/paths";
 import RutasPrivadas from "./config/routes/privateRoutes";
 import RutasPublicas from "./config/routes/routespublic";
 import NoFound from "./pages/404/nofound";
 import HomeInicial from "./pages/home/home";
 import Login from "./pages/login/Login";
 import Prueba from "./pages/prueba/prueba";
+import Recowerypsw from "./pages/recowerypsw/recowerypsw";
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                             <Route path={LOGIN} element={<Login />} />
                             <Route path={NOFOUND} element={<NoFound />} />
                             <Route path={PRUEBA} element={<Prueba />} />
+                            <Route path={RCPASS} element={<Recowerypsw />} />
                             <Route index element={<HomeInicial />} />
                         </Route>
 

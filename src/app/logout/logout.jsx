@@ -4,7 +4,7 @@ import { useAuthContext } from "../../config/authentication/authentication"
 import { PRIVADO } from "../../config/routes/paths";
 
 function Logou() {
-  const { logout } = useAuthContext();
+  const { logout, } = useAuthContext();
   const CerrarSesion = () => {
     logout()
   }

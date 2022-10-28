@@ -4,7 +4,7 @@ import { LOGIN } from "./paths"
 
 function RutasPrivadas() {
     const { autenticado } = useAuthContext()
-    if (!autenticado) {
+    if (autenticado === false) {
         return <Navigate to={LOGIN} />
     }
 
