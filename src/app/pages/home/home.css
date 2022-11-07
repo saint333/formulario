@@ -1,0 +1,10 @@
+.tarjetas{
+    height: calc(100vh - 114px);
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+}
+.card-nuevo{
+    text-decoration: none;
+}

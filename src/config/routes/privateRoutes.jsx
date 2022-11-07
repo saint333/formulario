@@ -9,7 +9,7 @@ function RutasPrivadas() {
     }
 
     return (
-        <div>
+        <div className="container-fluid">
             <Outlet />
         </div>
     )

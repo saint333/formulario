@@ -7,13 +7,7 @@ function AuthContextProvider({ children }) {
     const [autenticado, setAutenticado] = useState(false);
 
     const peticion = useCallback( async (conf) => {
-        let response = await fetch(`http://localhost:4000/api/user/${conf.id}`,{
-            method: "GET",
-            headers : {
-                "Accept": "*/*",
-                "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-               }    
-        })
+        let response = await fetch(`https://api-formularios.gnxcode.dev/api/user/${conf.id}`)
         let data = await response.json()
         return data
     },[])

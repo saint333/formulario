@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Home from "./app/home/home";
-import Logou from "./app/logout/logout";
+import Home from "./app/pages/home/home";
+import Logou from "./app/components/logout/logout";
 import NavbarDefauld from "./components/navbar/navbar";
 import AuthContextProvider from "./config/authentication/authentication";
-import { HOME, LOGIN, LOGOUT, NOFOUND, PRIVADO, PRUEBA, RCPASS } from "./config/routes/paths";
+import { EDITAR_CON_BASE, EDITAR_SIN_BASE, HOME, LOGIN, LOGOUT, NOFOUND, PRIVADO, PRUEBA, RCPASS } from "./config/routes/paths";
 import RutasPrivadas from "./config/routes/privateRoutes";
 import RutasPublicas from "./config/routes/routespublic";
 import NoFound from "./pages/404/nofound";
@@ -12,6 +12,8 @@ import HomeInicial from "./pages/home/home";
 import Login from "./pages/login/Login";
 import Prueba from "./pages/prueba/prueba";
 import Recowerypsw from "./pages/recowerypsw/recowerypsw";
+import NuevoFormulario from "./app/pages/crear_formulario/nuevo_formulario";
+import BaseFormulario from "./app/pages/base_formulario/base_formulario";
 
 function App() {
     return (
@@ -30,6 +32,8 @@ function App() {
                         <Route path={PRIVADO} element={<RutasPrivadas />}>
                             <Route path={PRIVADO} element={<Home />} />
                             <Route path={LOGOUT} element={<Logou />} />
+                            <Route path={EDITAR_SIN_BASE} element={<NuevoFormulario />} />
+                            <Route path={EDITAR_CON_BASE} element={<BaseFormulario />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>
