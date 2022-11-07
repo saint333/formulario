@@ -78,11 +78,11 @@ function Prueba() {
         var payload = new FormData();
         payload.append('file', parseoImg);
         let foto = webcam.current.getScreenshot();
-        let prueba = await fetch("http://localhost:9000/api/user/upload",{
+        let prueba = await fetch("https://api-formularios.gnxcode.dev/api/user/upload",{
             method: "POST",
             body: payload
         })
-        console.log(prueba);
+        console.log(await prueba.json());
         setImagen({
             url: foto
         });
