@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink } from "react-router-dom";
-import { HOME, LOGIN, LOGOUT, PRIVADO, PRUEBA, RCPASS, SAMI } from "../../config/routes/paths";
+import { HOME, LOGIN, LOGOUT, PRIVADO, SAMI } from "../../config/routes/paths";
 import Figure from "react-bootstrap/Figure";
 import Logo from "../../assets/IMG_LOGO_SAMISHOP2022.png";
 import "./navbar.css"
@@ -14,7 +14,7 @@ function NavbarDefauld() {
         <Navbar bg='light' variant='light' expand='md'>
             <Container>
                 <Navbar.Brand>
-                    <NavLink to={HOME} end>
+                    <NavLink to={autenticado ? PRIVADO : LOGIN} end>
                         <Figure>
                             <Figure.Image
                                 src={Logo}
@@ -26,14 +26,8 @@ function NavbarDefauld() {
                     </NavLink>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls='responsive-navbar-nav' />
-                <Navbar.Collapse id='responsive-navbar-nav'>
-                    <Nav className='m-auto'>
-                        <NavLink end to={PRUEBA} className={({isActive}) => (isActive ? "nav-link active" : "nav-link")}>
-                            Prueba
-                        </NavLink>
-                        <NavLink end to={RCPASS} className={({isActive}) => (isActive ? "nav-link active" : "nav-link")}>
-                            Recuperar Cuenta
-                        </NavLink>
+                <Navbar.Collapse id='responsive-navbar-nav' className="justify-content-end">
+                    {autenticado ? <Nav className='m-auto'>
                         <a
                             className='nav-link'
                             target='_blank'
@@ -43,12 +37,12 @@ function NavbarDefauld() {
                             SamiShop
                         </a>
                         <NavLink end to={PRIVADO} className={({isActive}) => (isActive ? "nav-link active" : "nav-link")}>
-                            App
+                            Crear Formularios
                         </NavLink>
-                    </Nav>
+                    </Nav> : ""}
                     <Nav>
                         <NavLink end to={autenticado ? LOGOUT : LOGIN} className={({isActive}) => (isActive ? "nav-link active" : "nav-link")}>
-                            { autenticado ? autenticado.correo : "Iniciar sesión"}
+                            { autenticado ? autenticado.nombre.split(" ")[0] : "Iniciar sesión"}
                         </NavLink>
                     </Nav>
                 </Navbar.Collapse>

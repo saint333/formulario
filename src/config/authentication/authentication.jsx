@@ -7,13 +7,14 @@ function AuthContextProvider({ children }) {
     const [autenticado, setAutenticado] = useState(false);
 
     const peticion = useCallback( async (conf) => {
-        let response = await fetch(`https://api-formularios.gnxcode.dev/api/user/${conf.id}`)
+        // let response = await fetch(`https://api-formularios.gnxcode.dev/api/user/${conf.id}`)
+        let response = await fetch(`http://localhost:9000/api/user/${conf}`)
         let data = await response.json()
         return data
     },[])
 
-    const login = useCallback(async function (email, password) {
-        const verficacion = await peticion({email,password,id: 1})
+    const logins = useCallback(async function (id) {
+        const verficacion = await peticion(id)
         return verficacion
     }, [peticion]);
 
@@ -28,12 +29,12 @@ function AuthContextProvider({ children }) {
     const value = useMemo(
         () => ({
             peticion,
-            login,
+            logins,
             logout,
             entrar,
             autenticado,
         }),
-        [peticion,login, logout, entrar, autenticado]
+        [peticion,logins, logout, entrar, autenticado]
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

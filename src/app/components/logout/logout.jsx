@@ -4,8 +4,22 @@ import { useAuthContext } from "../../../config/authentication/authentication"
 import { PRIVADO } from "../../../config/routes/paths";
 
 function Logou() {
-  const { logout, } = useAuthContext();
-  const CerrarSesion = () => {
+  const { logout, autenticado } = useAuthContext();
+  const CerrarSesion = async() => {
+    await fetch(
+      `http://localhost:9000/api/user/sesion/${autenticado.dni}`,
+      {
+          method: "PUT",
+          body: JSON.stringify({
+              sesion: 0,
+          }),
+          headers : {
+            "Accept": "*/*",
+            "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+            "Content-Type": "application/json"
+           }
+      }
+  );
     logout()
   }
   return (

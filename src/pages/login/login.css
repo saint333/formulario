@@ -4,11 +4,3 @@
     justify-content: center;
     align-items: center;
 }
-.rounded-0.card {
-    width: 360px;
-    height: fit-content;
-}
-.btn.btn-sami,.btn.btn-sami:hover,.btn.btn-sami:active,.btn.btn-sami:focus{
-    background-color: #3b885c !important;
-    color: white !important;
-}
