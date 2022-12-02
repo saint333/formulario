@@ -1,36 +1,55 @@
 import Container from "react-bootstrap/esm/Container";
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
-import { Link } from "react-router-dom";
-import { EDITAR_CON_BASE, EDITAR_SIN_BASE } from "../../config/routes/paths";
-import Col from "react-bootstrap/esm/Col";
+import Col from 'react-bootstrap/Col'
+import { useState } from "react";
+import NuevoFormulario from "../pages/crear_formulario/nuevo_formulario";
+import BaseFormulario from "../pages/base_formulario/base_formulario";
+import {AiOutlinePlus} from "react-icons/ai"
+import {GrTemplate} from "react-icons/gr"
 
 function Tarjetas() {
-    return <main className="tarjetas">
+  const [page, setPage] = useState("")
+
+  const cambiarvista = tipo => {
+    tipo === 1 
+    ? setPage(<NuevoFormulario/>)
+    : setPage(<BaseFormulario/>)
+  }
+    return (
+      page === "" ?
       <Container>
-        
-        <Row className="gap-5 gap-lg-0 justify-content-between">
-          <Col lg="5" className="text-center">
-            <Link to={EDITAR_SIN_BASE} className="card-nuevo">
-              <Card>
-                <Card.Body>
-                  Crear un formulario desde cero
-                </Card.Body>
-              </Card>
-            </Link>
-          </Col>
-          <Col lg="5" className="text-center">
-            <Link to={EDITAR_CON_BASE} className="card-nuevo">
-              <Card>
-                <Card.Body>
-                  Crear un formulario desde una plantilla
-                </Card.Body>
-              </Card>
-            </Link>
-          </Col>
-        </Row>
-      </Container>
-    </main>;
+      <Row className="justify-content-evenly opciones-card">
+        <Col sm="4">
+          <Card onClick={e=>cambiarvista(1)} className="bg-transparent text-center" style={{cursor: 'pointer'}}>
+            <Card.Body>
+              <Card.Text className="py-5 rounded-4 bg-card">
+                <AiOutlinePlus style={{fontSize: '45px'}}/>
+              </Card.Text>
+            <Card.Title className="text-center my-5">Comenzar desde cero</Card.Title>
+            <Card.Subtitle className="my-5">
+              Una hoja en blanco es lo que necesitas
+            </Card.Subtitle>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col sm="4" className="d-none">
+        <Card onClick={e=>cambiarvista(2)} className="bg-transparent text-center" style={{cursor: 'pointer'}}>
+            <Card.Body>
+            <Card.Text className="py-5 rounded-4 bg-card">
+                <GrTemplate style={{fontSize: '45px'}}/>
+              </Card.Text>
+            <Card.Title className="text-center my-5">Usar plantillas</Card.Title>
+            <Card.Subtitle className="my-5">
+              Elige una de los formularios prefabricados
+            </Card.Subtitle>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
+      : page
+    );
 }
 
 export default Tarjetas;

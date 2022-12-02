@@ -5,7 +5,7 @@ import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import { Link } from "react-router-dom";
-import { PRUEBA } from "../../config/routes/paths";
+import { REGISTRO } from "../../config/routes/paths";
 
 function Login() {
     const [modelsLoaded, setModelsLoaded] = useState(false);
@@ -132,14 +132,24 @@ function Login() {
                         img.crossOrigin = "anonymos";
                         compararImagen(img, id);
                     });
-                    const matche = new faceapi.FaceMatcher(
-                        descriptor.map((descripto) => {
-                            return new faceapi.LabeledFaceDescriptors(
-                                descripto.id.toString(),
-                                [descripto.deteccion.descriptor]
-                            );
-                        })
-                    );
+                    let matche
+                    if (data.body.length > 0) {
+                        console.log("entre");
+                        matche = new faceapi.FaceMatcher(
+                            descriptor.map((descripto) => {
+                                return new faceapi.LabeledFaceDescriptors(
+                                    descripto.id.toString(),
+                                    [descripto.deteccion.descriptor]
+                                );
+                            })
+                        );
+                    }else{
+                        closeWebcam()
+                        setAlerta({class:"col-9 col-md-7 m-auto mt-3 text-center",msg: `Usuario no registrado`})
+                    }
+                    // try {
+                    // } catch (e) {
+                    // }
                     const betsMatch = matche.findBestMatch(
                         detections[0].descriptor
                     );
@@ -229,7 +239,7 @@ function Login() {
             )}
             <Row>
               <Col className="col-9 col-md-7 m-auto mt-3 text-center">
-                ¿No tienes una cuenta? <Link to={PRUEBA}>registrate</Link>
+                ¿No tienes una cuenta? <Link to={REGISTRO}>registrate</Link>
               </Col>
             </Row>
             <Alert variant={"danger"} className={alerta.class}>

@@ -1,3 +1,144 @@
 .tox-statusbar__branding{
   display: none;
 }
+body{
+  overflow-x: hidden;
+}
+/* 
+ TODO:
+ create one style form i icons, line 22 / 27
+*/
+
+/* FONT AWESOME STACKING ICONS */
+.fa-stack {
+  margin-left: -4px;
+  font-size: 1rem;
+  width: 2.2rem;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2.1rem;
+}
+
+.bottom-buttons {
+  padding: 0 1rem;
+  margin-top: 1rem;
+}
+
+/* FORM STYLES */
+.form-wrap {
+  padding: 1rem;
+  margin: 1rem;
+  background: azure;
+  border: 1px solid #ddd;
+}
+.form-wrap hr {
+  margin-top: 21px;
+  margin-bottom: 0px;
+}
+
+.form-wrap .form-group {
+  padding: 0.55rem;
+}
+
+.form-wrap i {
+  margin-left: 1rem;
+  color: #333;
+}
+
+.form-wrap .well {
+  background: #fff;
+  border: 1px dashed #aaa;
+  padding: 0.9rem;
+}
+
+.form-list i {
+  margin-right: 1rem;
+  color: #333;
+}
+
+/* FORMBUILDER */
+#formbuilder {
+  display: flex;
+  justify-content: space-between;
+}
+
+#formbuilder a {
+  text-decoration: none;
+}
+
+/* TOOLKIT */
+#formbuilder #formbuilder-toolkit {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  min-width: 200px;
+
+  /* Fixed toolkit */
+  overflow: hidden;
+  position: fixed;
+}
+
+#formbuilder #formbuilder-toolkit .tolkit-item {
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: #ddd 1px solid;
+  border-radius: 3px;
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+/* FORMBUILDER CANVAS */
+#formbuilder #formbuilder-canvas {
+  flex: 1;
+  margin-left: 200px;
+}
+
+/* Every Form Element in form canvas */
+#formbuilder-canvas .form-group {
+  border: #ddd 1px solid;
+  border-radius: 3px;
+  margin-bottom: 0.5rem;
+  background: #fff;
+}
+
+#formbuilder-canvas .form-group p {
+  font-size: 1.2rem;
+  text-align: justify;
+}
+
+#formbuilder-canvas .notice {
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  border: 1px dashed #aaa;
+  border-radius: 3px;
+  color: #aaa;
+}
+
+/* Edit element */
+#formelementedit {
+  background: #fafafa;
+  border: #ddd 1px solid;
+  border-radius: 3px;
+}
+
+/* JSON VIEWER */
+#json-viewer {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  max-width: 250px;
+}
+
+#json-viewer pre {
+  font-size: 10px;
+  white-space: pre-wrap;
+}
+
