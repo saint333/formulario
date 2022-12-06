@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState, createContext, useContext } from "react";
 import PropTypes from "prop-types"
+import { RUTA } from "../routes/paths";
 
 export const AuthContext = createContext();
 
@@ -8,7 +9,7 @@ function AuthContextProvider({ children }) {
 
     const peticion = useCallback( async (conf) => {
         // let response = await fetch(`https://api-formularios.gnxcode.dev/api/user/${conf.id}`)
-        let response = await fetch(`http://localhost:9000/api/user/${conf}`)
+        let response = await fetch(`${RUTA}api/user/${conf}`)
         let data = await response.json()
         return data
     },[])

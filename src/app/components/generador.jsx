@@ -61,9 +61,9 @@ const esquema = [
         tipo: "radio",
         type: "radio",
         input:  `<div class="terminos"><span>Elige una opción</span>
-                    <label><input type="radio" name="radio-${Date.now()}" /><span>opcion 1</span></label>
-                    <label><input type="radio" name="radio-${Date.now()}" /><span>opcion 2</span></label>
-                    <label><input type="radio" name="radio-${Date.now()}" /><span>opcion 3</span></label>
+                    <label><input type="radio" name="radio-${Date.now()} value="opcion 1" /><span>opcion 1</span></label>
+                    <label><input type="radio" name="radio-${Date.now()} value="opcion 2" /><span>opcion 2</span></label>
+                    <label><input type="radio" name="radio-${Date.now()} value="opcion 3" /><span>opcion 3</span></label>
                 </div>`
     },
     {

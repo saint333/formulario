@@ -6,6 +6,7 @@ import Registrosformularios from "./registrosformularios";
 import Button from "react-bootstrap/esm/Button";
 import { useAuthContext } from "../../config/authentication/authentication";
 import Modal from "react-bootstrap/Modal";
+import { RUTA } from "../../config/routes/paths";
 
 export default function ListaFormularios() {
     const { autenticado } = useAuthContext();
@@ -14,7 +15,7 @@ export default function ListaFormularios() {
     const [form, setForm] = useState(null);
     const [show2, setShow2] = useState(false);
     const handleClose = async () => {
-        const response = await fetch(`http://localhost:9000/api/forms`, {
+        const response = await fetch(`${RUTA}api/forms`, {
             method: "DELETE",
             body: JSON.stringify({
                 id: form,
@@ -46,7 +47,7 @@ export default function ListaFormularios() {
     useEffect(() => {
         const peticion = async () => {
             const response = await fetch(
-                `http://localhost:9000/api/forms/${autenticado.dni}`
+                `${RUTA}api/forms/${autenticado.dni}`
             );
             const data = await response.json();
             setRows(data.body);

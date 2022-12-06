@@ -5,7 +5,7 @@ import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import { Link } from "react-router-dom";
-import { REGISTRO } from "../../config/routes/paths";
+import { REGISTRO, RUTA } from "../../config/routes/paths";
 
 function Login() {
     const [modelsLoaded, setModelsLoaded] = useState(false);
@@ -23,7 +23,7 @@ function Login() {
     useEffect(() => {
         const imagenes = async () => {
             const response = await fetch(
-                "http://localhost:9000/api/user/upload"
+                `${RUTA}api/user/upload`
             );
             const data = await response.json();
 
@@ -165,7 +165,7 @@ function Login() {
                       setAlerta({class:"col-9 col-md-7 m-auto mt-3 text-center",msg: `El usuario ${usuarios.body[0].nombre} ya inicio sesión`})
                     }
                     let sesion = await fetch(
-                        `http://localhost:9000/api/user/sesion/${usuarios.body[0].dni}`,
+                        `${RUTA}api/user/sesion/${usuarios.body[0].dni}`,
                         {
                             method: "PUT",
                             body: JSON.stringify({

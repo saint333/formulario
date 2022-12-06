@@ -14,6 +14,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import { useAuthContext } from "../../config/authentication/authentication";
 import { useEffect } from "react";
+import { RUTA } from "../../config/routes/paths";
 
 function Prueba() {
     const webcam = useRef();
@@ -31,7 +32,7 @@ function Prueba() {
     useEffect(() => {
         const imagenes = async () => {
             const response = await fetch(
-                "http://localhost:9000/api/user/upload"
+                `${RUTA}api/user/upload`
             );
             const data = await response.json();
 
@@ -188,8 +189,7 @@ function Prueba() {
         let parseoImg = new File([blob], `foto.png`, { type: "image/jpeg" });
         var payload = new FormData();
         payload.append("file", parseoImg);
-        // https://api-formularios.gnxcode.dev/api/user/upload
-        let prueba = await fetch("http://localhost:9000/api/user/upload", {
+        let prueba = await fetch(`${RUTA}api/user/upload`, {
             method: "POST",
             body: payload,
         });
@@ -227,7 +227,7 @@ function Prueba() {
             apellido: datos.apellidos,
         };
         event.preventDefault();
-        let prueba = await fetch("http://localhost:9000/api/user/", {
+        let prueba = await fetch(`${RUTA}api/user/`, {
             method: "POST",
             body: JSON.stringify(usuario),
             headers: {

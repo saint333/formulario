@@ -1,10 +1,11 @@
 import { useRef } from "react";
+import { RUTA } from "../../config/routes/paths";
 import "./forms.css";
 
 export default function Formulario(props) {
     console.log(JSON.stringify(props.json));
     const guardar = async () => {
-        await fetch("http://localhost:9000/api/forms",{
+        await fetch(`${RUTA}api/forms`,{
             method: "POST",
             body: JSON.stringify(props.json),
             headers : {
@@ -32,7 +33,7 @@ export default function Formulario(props) {
                         window.form.push(${props.json.id});
                     </script>`}
                     <br />
-                    {`<script src="http://localhost:3000/forms/form.js"></script>`}
+                    {`<script src="${process.env.PUBLIC_URL}/forms/form.js"></script>`}
                 </code>
             </div>
         </div>

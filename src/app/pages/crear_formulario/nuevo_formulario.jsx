@@ -221,6 +221,7 @@ function NuevoFormulario() {
                             ref={formulario}
                             style={{ width: `${ancho}px`, margin: "auto", maxWidth: "87%" }}
                             className='formulario'
+                            encType="multipart/form-data"
                         >
                             <Card
                                 style={{
