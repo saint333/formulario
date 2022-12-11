@@ -21,11 +21,12 @@ export default function Formulario(props) {
     setTimeout(() => {
         vista.current.innerHTML = props.json.estructura;
     }, 1000);
+    let ruta = window.location.origin
     return (
         <div className='vista'>
             <div ref={vista}></div>
-            <div className='text-center'>
-                <code className='bg-black d-inline-block my-5 p-2' style={{width: '700px', margin: 'auto', maxWidth: '87%;'}}>
+            <div className='d-flex'>
+                <code className='bg-black d-inline-block my-5 p-2 mx-auto' style={{width: '700px', margin: 'auto', maxWidth: '87%'}}>
                     {`<script>
                           if (window.form === undefined) {
                             window.form = [];
@@ -33,7 +34,7 @@ export default function Formulario(props) {
                         window.form.push(${props.json.id});
                     </script>`}
                     <br />
-                    {`<script src="${process.env.PUBLIC_URL}/forms/form.js"></script>`}
+                    {`<script src="${ruta}/forms/form.js"></script>`}
                 </code>
             </div>
         </div>

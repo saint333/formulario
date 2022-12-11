@@ -6,25 +6,28 @@ import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import { Link } from "react-router-dom";
 import { REGISTRO, RUTA } from "../../config/routes/paths";
+import "./login.css"
 
 function Login() {
     const [modelsLoaded, setModelsLoaded] = useState(false);
     const [captureVideo, setCaptureVideo] = useState(false);
     const [imag, setImag] = useState("");
     const { entrar, logins } = useAuthContext();
+    const [cerrar, setCerrar] = useState({ estado: false, dni: "" });
 
     const videoRef = useRef();
     const videoHeight = 480;
     const videoWidth = 640;
     const canvasRef = useRef();
 
-    const [alerta, setAlerta] = useState({class:"col-9 col-md-7 m-auto mt-3 d-none",msg: ""});
+    const [alerta, setAlerta] = useState({
+        class: "col-9 col-md-7 m-auto mt-3 d-none",
+        msg: "",
+    });
 
     useEffect(() => {
         const imagenes = async () => {
-            const response = await fetch(
-                `${RUTA}api/user/upload`
-            );
+            const response = await fetch(`${RUTA}api/user/upload`);
             const data = await response.json();
 
             setImag(data);
@@ -44,7 +47,8 @@ function Login() {
     }, []);
 
     const startVideo = () => {
-      setAlerta({class:"col-9 col-md-7 m-auto mt-3 d-none",msg: ""})
+        setAlerta({ class: "col-9 col-md-7 m-auto mt-3 d-none", msg: "" });
+        setCerrar({ estado: false, dni: "" });
         setCaptureVideo(true);
         navigator.mediaDevices
             .getUserMedia({ video: { width: 300 } })
@@ -87,13 +91,13 @@ function Login() {
                 faceapi.matchDimensions(canvasRef.current, displaySize);
 
                 const detections = await faceapi
-                    .detectAllFaces(
+                    .detectSingleFace(
                         videoRef.current,
                         new faceapi.TinyFaceDetectorOptions()
                     )
                     .withFaceLandmarks()
                     .withFaceExpressions()
-                    .withFaceDescriptors();
+                    .withFaceDescriptor();
 
                 const resizedDetections = faceapi.resizeResults(
                     detections,
@@ -123,18 +127,18 @@ function Login() {
                         canvasRef.current,
                         resizedDetections
                     );
-                if (detections.length > 0) {
+                if (detections) {
                     let data = imag;
                     data.body.forEach((imagen) => {
                         const img = document.createElement("img");
                         img.src = imagen.foto;
-                        let id = imagen.idfotos_usuarios;
+                        // let id = imagen.idfotos_usuarios;
+                        let id = imagen.idfoto_usuario;
                         img.crossOrigin = "anonymos";
                         compararImagen(img, id);
                     });
-                    let matche
+                    let matche;
                     if (data.body.length > 0) {
-                        console.log("entre");
                         matche = new faceapi.FaceMatcher(
                             descriptor.map((descripto) => {
                                 return new faceapi.LabeledFaceDescriptors(
@@ -143,26 +147,33 @@ function Login() {
                                 );
                             })
                         );
-                    }else{
-                        closeWebcam()
-                        setAlerta({class:"col-9 col-md-7 m-auto mt-3 text-center",msg: `Usuario no registrado`})
+                    } else {
+                        closeWebcam();
+                        setAlerta({
+                            class: "col-9 col-md-7 m-auto mt-3 text-center",
+                            msg: `Usuario no registrado`,
+                        });
                     }
-                    // try {
-                    // } catch (e) {
-                    // }
                     const betsMatch = matche.findBestMatch(
-                        detections[0].descriptor
+                        detections.descriptor
                     );
                     let id_imagen = betsMatch.label;
-                    if (id_imagen === "unknown"){
-                      closeWebcam()
-                      setAlerta({class:"col-9 col-md-7 m-auto mt-3 text-center",msg: `Usuario no registrado`})
+                    console.log(betsMatch);
+                    if (id_imagen === "unknown") {
+                        closeWebcam();
+                        setAlerta({
+                            class: "col-9 col-md-7 m-auto mt-3 text-center",
+                            msg: `Usuario no registrado`,
+                        });
                     }
                     let usuarios = await logins(id_imagen);
-                    // let user = await usuarios
                     if (usuarios.body[0].sesion_activa === 1) {
-                      closeWebcam()
-                      setAlerta({class:"col-9 col-md-7 m-auto mt-3 text-center",msg: `El usuario ${usuarios.body[0].nombre} ya inicio sesión`})
+                        closeWebcam();
+                        setAlerta({
+                            class: "col-9 col-md-7 m-auto mt-3 text-center",
+                            msg: `El usuario ${usuarios.body[0].nombre} ya inicio sesión`,
+                        });
+                        setCerrar({ estado: true, dni: usuarios.body[0].dni });
                     }
                     let sesion = await fetch(
                         `${RUTA}api/user/sesion/${usuarios.body[0].dni}`,
@@ -171,21 +182,22 @@ function Login() {
                             body: JSON.stringify({
                                 sesion: 1,
                             }),
-                            headers : {
-                              "Accept": "*/*",
-                              "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-                              "Content-Type": "application/json"
-                             }
+                            headers: {
+                                Accept: "*/*",
+                                "User-Agent":
+                                    "Thunder Client (https://www.thunderclient.com)",
+                                "Content-Type": "application/json",
+                            },
                         }
                     );
-                    closeWebcam()
-                    let auth = await sesion.json()
+                    closeWebcam();
+                    let auth = await sesion.json();
                     entrar(auth.body[0]);
                 } else {
                     console.log("encender");
                 }
             }
-        }, 500);
+        }, 1000);
     };
 
     const closeWebcam = () => {
@@ -194,27 +206,52 @@ function Login() {
         setCaptureVideo(false);
     };
 
+    const cerrarSesion = async () => {
+        if (cerrar.estado) {
+            let sesion = await fetch(`${RUTA}api/user/sesion/${cerrar.dni}`, {
+                method: "PUT",
+                body: JSON.stringify({
+                    sesion: 0,
+                }),
+                headers: {
+                    Accept: "*/*",
+                    "User-Agent":
+                        "Thunder Client (https://www.thunderclient.com)",
+                    "Content-Type": "application/json",
+                },
+            });
+            let auth = await sesion.json();
+            setCerrar({ estado: false, dni: "" });
+            setAlerta({
+                class: "col-9 col-md-7 m-auto mt-3 text-center",
+                msg: `El usuario ${auth.body[0].nombre} cerro sesión en todos los dispositivos`,
+            });
+        }
+    };
+
     return (
         <div>
             <div style={{ textAlign: "center", padding: "10px" }}>
                 {captureVideo && modelsLoaded ? (
                     <button onClick={closeWebcam} className='btn btn-sami'>
-                        Close Webcam
+                        Cerrar camara
                     </button>
                 ) : (
                     <button onClick={startVideo} className='btn btn-sami'>
-                        Open Webcam
+                        Abrir camara
                     </button>
                 )}
             </div>
             {captureVideo ? (
                 modelsLoaded ? (
-                    <div>
+                    <div style={{
+                        padding: "10px"
+                    }}>
                         <div
                             style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                padding: "10px",
+                                position: "relative",
+                                margin: "auto",
+                                width: 'fit-content'
                             }}
                         >
                             <video
@@ -222,14 +259,17 @@ function Login() {
                                 height={videoHeight}
                                 width={videoWidth}
                                 onPlay={handleVideoOnPlay}
-                                style={{ borderRadius: "10px" }}
+                                style={{
+                                    borderRadius: "10px",
+                                    maxWidth: "100%",
+                                    height: "auto"
+                                }}
                             />
                             <canvas
                                 ref={canvasRef}
-                                style={{ position: "absolute" }}
+                                className="canvas-1"
                             />
                         </div>
-                      
                     </div>
                 ) : (
                     <div>loading...</div>
@@ -238,13 +278,26 @@ function Login() {
                 <></>
             )}
             <Row>
-              <Col className="col-9 col-md-7 m-auto mt-3 text-center">
-                ¿No tienes una cuenta? <Link to={REGISTRO}>registrate</Link>
-              </Col>
+                <Col className='col-9 col-md-7 m-auto mt-3 text-center'>
+                    ¿No tienes una cuenta? <Link to={REGISTRO}>registrate</Link>
+                </Col>
             </Row>
             <Alert variant={"danger"} className={alerta.class}>
-                    {alerta.msg}
-                </Alert>
+                {alerta.msg}
+            </Alert>
+
+            <div className='text-center mt-3'>
+                <button
+                    onClick={() => cerrarSesion()}
+                    className={
+                        cerrar.estado
+                            ? "btn btn-outline-danger d-block m-auto"
+                            : "btn btn-outline-danger d-none m-auto"
+                    }
+                >
+                    Cerrar sesion
+                </button>
+            </div>
         </div>
     );
 }

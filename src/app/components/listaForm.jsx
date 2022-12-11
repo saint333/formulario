@@ -7,6 +7,7 @@ import Button from "react-bootstrap/esm/Button";
 import { useAuthContext } from "../../config/authentication/authentication";
 import Modal from "react-bootstrap/Modal";
 import { RUTA } from "../../config/routes/paths";
+import BaseFormulario from "../pages/base_formulario/base_formulario";
 
 export default function ListaFormularios() {
     const { autenticado } = useAuthContext();
@@ -21,16 +22,18 @@ export default function ListaFormularios() {
                 id: form,
                 dni: autenticado.dni,
             }),
-            headers : {
-              "Accept": "*/*",
-              "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-              "Content-Type": "application/json"
-             }
+            headers: {
+                Accept: "*/*",
+                "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+                "Content-Type": "application/json",
+            },
         });
-        console.log(JSON.stringify({
-          id: form,
-          dni: autenticado.dni,
-      }));
+        console.log(
+            JSON.stringify({
+                id: form,
+                dni: autenticado.dni,
+            })
+        );
         const data = await response.json();
         if (data.estado) {
             setShow(false);
@@ -38,40 +41,41 @@ export default function ListaFormularios() {
         }
     };
     const handleShow = () => setShow(true);
-    const handleClose2 = () => setShow2(false)
+    const handleClose2 = () => setShow2(false);
     const [id2, setId2] = useState("");
     const handleShow2 = (index) => {
-        setId2(index)
+        setId2(index);
         setShow2(true);
-    }
+    };
     useEffect(() => {
         const peticion = async () => {
-            const response = await fetch(
-                `${RUTA}api/forms/${autenticado.dni}`
-            );
+            const response = await fetch(`${RUTA}api/forms/${autenticado.dni}`);
             const data = await response.json();
             setRows(data.body);
         };
         peticion();
     }, [autenticado]);
     const [id, setId] = useState("");
-
+    const [ideditar, setIdeditar] = useState("");
     const eliminar = (query) => {
         handleShow();
         setForm(query);
     };
-
+    const editar = (data) => {
+        setIdeditar(data);
+    };
+    let ruta = window.location.origin;
     return (
         <>
-            {id === "" ? (
+            {id === "" && ideditar === "" ? (
                 <Table responsive>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Formulario</th>
-                            <th>Fecha de creación</th>
-                            <th>N° de ingresos</th>
-                            <th></th>
+                            <th className="text-truncate">ID</th>
+                            <th className="text-truncate">Formulario</th>
+                            <th className="text-truncate">Fecha de creación</th>
+                            <th className="text-truncate">N° de ingresos</th>
+                            <th className="text-truncate"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,15 +84,24 @@ export default function ListaFormularios() {
                                 key={element.idformularios}
                                 id={element.idformularios}
                             >
-                                <td>{index}</td>
-                                <td style={{ cursor: "pointer" }} onClick={() => handleShow2(element.idformularios)}>{element.nombre_formulario}</td>
-                                <td>{element.fecha_creacion.split("T")[0]}</td>
+                                <td className="text-truncate">{index + 1}</td>
+                                <td
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() =>
+                                        handleShow2(element.idformularios)
+                                    }
+                                    className="text-truncate"
+                                >
+                                    {element.nombre_formulario}
+                                </td>
+                                <td className="text-truncate">{element.fecha_creacion.split("T")[0]}</td>
                                 <td>
                                     <span
                                         onClick={() =>
                                             setId(element.idformularios)
                                         }
                                         style={{ cursor: "pointer" }}
+                                        className="text-truncate"
                                     >
                                         {element.cantidad_de_registro}
                                     </span>
@@ -97,7 +110,7 @@ export default function ListaFormularios() {
                                     <Button
                                         variant='light-2'
                                         className='d-flex align-items-center'
-                                        onClick={() => console.log(element)}
+                                        onClick={() => editar(element)}
                                     >
                                         <FiEdit />
                                     </Button>
@@ -115,8 +128,10 @@ export default function ListaFormularios() {
                         ))}
                     </tbody>
                 </Table>
-            ) : (
+            ) : ideditar === "" ? (
                 <Registrosformularios id={id} />
+            ) : (
+                <BaseFormulario idform={ideditar}/>
             )}
 
             <Modal
@@ -151,16 +166,16 @@ export default function ListaFormularios() {
                     <Modal.Title>Codigo de insertado</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <code className='bg-black d-inline-block my-5 p-2'>
-                    {`<script>
+                    <code className='bg-black d-inline-block my-5 p-2 w-100'>
+                        {`<script>
                           if (window.form === undefined) {
                             window.form = [];
                         }
                         window.form.push(${id2});
                     </script>`}
-                    <br />
-                    {`<script src="http://localhost:3000/forms/form.js"></script>`}
-                </code>
+                        <br />
+                        {`<script src="${ruta}/forms/form.js"></script>`}
+                    </code>
                 </Modal.Body>
             </Modal>
         </>

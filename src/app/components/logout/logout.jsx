@@ -1,14 +1,14 @@
 import Button from "react-bootstrap/esm/Button";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../../config/authentication/authentication"
-import { PRIVADO } from "../../../config/routes/paths";
+import { PRIVADO, RUTA } from "../../../config/routes/paths";
 
 function Logou() {
   const { logout, autenticado } = useAuthContext();
   const CerrarSesion = async() => {
     console.log(autenticado.dni);
     await fetch(
-      `http://localhost:9000/api/user/sesion/${autenticado.dni}`,
+      `${RUTA}api/user/sesion/${autenticado.dni}`,
       {
           method: "PUT",
           body: JSON.stringify({

@@ -28,6 +28,7 @@ function Prueba() {
     const { entrar } = useAuthContext();
     const [imag, setImag] = useState("");
     const [msg, setMgs] = useState("Rostro no detectado");
+    const [error, seterror] = useState({msg: "",clase: "d-none"})
 
     useEffect(() => {
         const imagenes = async () => {
@@ -85,8 +86,6 @@ function Prueba() {
         faceapi.draw.drawDetections(canvas.current, resized);
         faceapi.draw.drawFaceLandmarks(canvas.current, resized);
         faceapi.draw.drawFaceExpressions(canvas.current, resized);
-        console.log(image.current);
-        console.log(detecciones.length);
         if (detecciones.length === 0) {
             setShow(false);
             setAlerta("d-block");
@@ -99,7 +98,8 @@ function Prueba() {
             data.body.forEach((imagen) => {
                 const img = document.createElement("img");
                 img.src = imagen.foto;
-                let id = imagen.idfotos_usuarios;
+                // let id = imagen.idfotos_usuarios;
+                let id = imagen.idfoto_usuario;
                 img.crossOrigin = "anonymos";
                 console.log(img);
                 compararImagen(img, id);
@@ -221,8 +221,9 @@ function Prueba() {
             sexo: datos.sexo === "hombre" ? 1 : 2,
             correo: datos.correo,
             telefono: datos.telefono,
-            empresa_ruc: "09876543215",
-            fotos_usuarios_idfotos_usuarios: imagen.id_foto,
+            // empresa_ruc: "09876543215",
+            // fotos_usuarios_idfotos_usuarios: imagen.id_foto,
+            idfoto_usuario: imagen.id_foto,
             sesion_activa: 1,
             apellido: datos.apellidos,
         };
@@ -237,8 +238,8 @@ function Prueba() {
             },
         });
         let response = await prueba.json();
-        console.log(event);
         if (response.estado) {
+            seterror({msg: "",clase: "d-none"})
             setVertexto("Registrar Usuario");
             event.target.reset();
             entrar({
@@ -247,6 +248,11 @@ function Prueba() {
                 nombre: datos.nombres,
                 dni: datos.dni
             });
+        }else{
+            setVertexto("Registrar");
+            let mensaje = response.body.includes("correo_UNIQUE") ? "correo" : response.body.includes("dni_UNIQUE") ? "dni": response.body.includes("telefono_UNIQUE") ? "celular" : ""
+            seterror({msg: mensaje, clase: 'unset'})
+            console.log(response);
         }
     };
 
@@ -336,12 +342,13 @@ function Prueba() {
                                 controlId='validationCustom01'
                                 className='mb-3'
                             >
-                                <Form.Label>Nombres</Form.Label>
+                                <Form.Label>Nombre</Form.Label>
                                 <Form.Control
                                     required
                                     type='text'
                                     name='nombres'
-                                    pattern="[a-zA-ZÀ-ÖØ-öø-ÿ]+\.?(( |\-)[a-zA-ZÀ-ÖØ-öø-ÿ]+\.?)*"
+                                    minLength={"4"}
+                                    pattern="[a-zA-ZÀ-ÖØ-öø-ÿ]+?(( | )[a-zA-ZÀ-ÖØ-öø-ÿ]+?)*"
                                 />
                             </Form.Group>
                             <Form.Group
@@ -349,12 +356,13 @@ function Prueba() {
                                 md='6'
                                 controlId='validationCustom02'
                             >
-                                <Form.Label>Apellidos</Form.Label>
+                                <Form.Label>Apellido</Form.Label>
                                 <Form.Control
                                     required
                                     type='text'
                                     name='apellidos'
-                                    pattern="[a-zA-ZÀ-ÖØ-öø-ÿ]+\.?(( |\-)[a-zA-ZÀ-ÖØ-öø-ÿ]+\.?)*"
+                                    minLength={"4"}
+                                    pattern="[a-zA-ZÀ-ÖØ-öø-ÿ]+?(( | )[a-zA-ZÀ-ÖØ-öø-ÿ]+?)*"
                                 />
                             </Form.Group>
                             <Form.Group
@@ -390,7 +398,7 @@ function Prueba() {
                                 <Form.Label>Celular</Form.Label>
                                 <input
                                     className="form-control"
-                                    type='number'
+                                    type='text'
                                     required
                                     min={"1"}
                                     maxLength={"9"}
@@ -409,7 +417,7 @@ function Prueba() {
                             >
                                 <Form.Label>DNI:</Form.Label>
                                 <Form.Control
-                                    type='number'
+                                    type='text'
                                     required
                                     min={"1"}
                                     maxLength={"8"}
@@ -437,6 +445,11 @@ function Prueba() {
                             id='formHorizontalRadios2'
                             defaultValue={"mujer"}
                         />
+                        <Col md='12' className='mt-3'>
+                <Alert variant={"danger"} className={`text-center ${error.clase}`}>
+                    Campo {error.msg} ya registrado.
+                </Alert>
+            </Col>
                         <Button
                             type='submit'
                             variant='sami'
