@@ -49,25 +49,27 @@ function VerFormulario({formEditar}) {
     const [color, setColor] = useState(diseno_forms.formulario.texto);
     const [ancho, setAncho] = useState(diseno_forms.formulario.ancho);
     const [texto, setTexto] = useState(diseno_forms.formulario.orientacion);
-    const [forma, setforma] = useState("none");
-    const [tamano, setTamano] = useState("20px");
-    const [forma1, setforma1] = useState("none");
-    const [tamano1, setTamano1] = useState("16px");
-    const [estilo, setEstilo] = useState("");
+    const [forma, setforma] = useState(diseno_forms.titulo.forma);
+    const [tamano, setTamano] = useState(diseno_forms.titulo.tamano);
+    const [forma1, setforma1] = useState(diseno_forms.subtitulo.forma);
+    const [tamano1, setTamano1] = useState(diseno_forms.subtitulo.tamano);
+    const [estilo, setEstilo] = useState(formEditar.estilo);
     const envio = useRef();
-    const [btn, setBtn] = useState("Enviar");
-    const [tamano2, setTamano2] = useState("16px");
-    const [background2, setBackground2] = useState("#ffffff");
-    const [color2, setColor2] = useState("#000000");
-    const [texto2, setTexto2] = useState("center");
-    const [forma2, setforma2] = useState("none");
-    const [padding, setPadding] = useState("6px");
-    const [padding1, setPadding1] = useState("12px");
-    const [border, setBorder] = useState("1px");
-    const [tborder, setTborder] = useState("solid");
-    const [cborder, setCborder] = useState("#000000");
-    const [radius, setRadius] = useState("0");
-    const [rtipo, setRtipo] = useState("px");
+    const [btn, setBtn] = useState(diseno_forms.boton.texto);
+    const [tamano2, setTamano2] = useState(diseno_forms.boton.tamano_texto);
+    const [background2, setBackground2] = useState(diseno_forms.boton.fondo);
+    const [color2, setColor2] = useState(diseno_forms.boton.color_texto);
+    const [texto2, setTexto2] = useState(diseno_forms.boton.orientacion);
+    const [forma2, setforma2] = useState(diseno_forms.boton.forma);
+    const [padding, setPadding] = useState(diseno_forms.boton.espacio_y);
+    const [padding1, setPadding1] = useState(diseno_forms.boton.espacio_x);
+    const [border, setBorder] = useState(diseno_forms.boton.borde);
+    const [tborder, setTborder] = useState(diseno_forms.boton.tipo);
+    const [cborder, setCborder] = useState(diseno_forms.boton.color_borde);
+    const [radius, setRadius] = useState(diseno_forms.boton.redondeo[0]);
+    const [rtipo, setRtipo] = useState(diseno_forms.boton.redondeo[1]);
+    const [display1, setDisplay1] = useState(diseno_forms.titulo.activo)
+    const [display2, setDisplay2] = useState(diseno_forms.subtitulo.activo)
     const valores = [
         { id: 1, valor: "left" },
         { id: 2, valor: "center" },
@@ -100,12 +102,12 @@ function VerFormulario({formEditar}) {
     };
 
     const visibilidad = (tipo) => {
-        titulo.current.style.display = display.find((e) => e.id === tipo).valor;
+        setDisplay1(display.find((e) => e.id === tipo).valor)
     };
     const visibilidad1 = (tipo) => {
-        titulo1.current.style.display = display.find(
+        setDisplay2(display.find(
             (e) => e.id === tipo
-        ).valor;
+        ).valor);
     };
     const [inputs, setInputs] = useState(JSON.parse(formEditar.campos));
     const dragItem = useRef();
@@ -146,7 +148,7 @@ function VerFormulario({formEditar}) {
     };
     const [json, setJson] = useState(null);
     const guardar = () => {
-        let fecha = new Date().toLocaleString().replace(",", "").split(" ");
+        let fecha = new Date(formEditar.fecha_creacion).toLocaleString().replace(",", "").split(" ");
         let date = fecha[0].split("/");
         const json = {
             titulo: tiutlo,
@@ -154,9 +156,9 @@ function VerFormulario({formEditar}) {
             campos: inputs,
             estilo: estilo,
             estructura: contenido.current.innerHTML,
-            registro: 0,
+            registro: formEditar.cantidad_registro,
             usuario: autenticado.dni,
-            id: Date.now(),
+            id: formEditar.idformularios,
             diseno_general: [
                 {
                     formulario: {
@@ -167,14 +169,14 @@ function VerFormulario({formEditar}) {
                     },
                     titulo: {
                         texto: tiutlo,
-                        activo: titulo.current.style.display,
+                        activo: display1,
                         orientacion: titulo.current.style.textAlign,
                         forma: forma,
                         tamano: tamano
                     },
                     subtitulo: {
                         texto: tiutlo1,
-                        activo: titulo1.current.style.display,
+                        activo: display1,
                         orientacion: titulo1.current.style.textAlign,
                         forma: forma1,
                         tamano: tamano1
@@ -196,7 +198,7 @@ function VerFormulario({formEditar}) {
                 },
             ],
         };
-        setJson(json);
+        setJson({json,actualizar:true});
         setScrit(true);
     };
     const [scrit, setScrit] = useState(null);
@@ -239,6 +241,7 @@ function VerFormulario({formEditar}) {
                                         style={{
                                             textTransform: forma,
                                             fontSize: tamano,
+                                            display: display1
                                         }}
                                         className='titulo'
                                     >
@@ -249,6 +252,7 @@ function VerFormulario({formEditar}) {
                                         style={{
                                             textTransform: forma1,
                                             fontSize: tamano1,
+                                            display : display2
                                         }}
                                         className='subtitulo'
                                     >
@@ -320,7 +324,7 @@ function VerFormulario({formEditar}) {
                                             {btn}
                                         </button>
                                         <div className='editar'>
-                                            <FiEdit />
+                                            
                                         </div>
                                     </Card.Footer>
                                 </Card.Body>
@@ -529,7 +533,7 @@ function VerFormulario({formEditar}) {
                                                                 e.target.checked
                                                             )
                                                         }
-                                                        defaultChecked
+                                                        defaultChecked={diseno_forms.titulo.activo === "" ? true : false}
                                                         className='my-3'
                                                     />
                                                     <div className='mb-2'>
@@ -541,7 +545,9 @@ function VerFormulario({formEditar}) {
                                                         name='group1'
                                                         type={type}
                                                         id={"1"}
-                                                        defaultChecked
+                                                        defaultChecked={diseno_forms.titulo.orientacion === "left" || diseno_forms.titulo.orientacion === "" ? true && setTimeout(() => {
+                                                            cambiartitulo(1)
+                                                        }, 0): false}
                                                         onChange={(e) =>
                                                             cambiartitulo(1)
                                                         }
@@ -552,6 +558,9 @@ function VerFormulario({formEditar}) {
                                                         name='group1'
                                                         type={type}
                                                         id={"2"}
+                                                        defaultChecked={diseno_forms.titulo.orientacion === "center" ? true && setTimeout(() => {
+                                                            cambiartitulo(2)
+                                                        }, 0) : false}
                                                         onChange={(e) =>
                                                             cambiartitulo(2)
                                                         }
@@ -562,6 +571,9 @@ function VerFormulario({formEditar}) {
                                                         name='group1'
                                                         type={type}
                                                         id={"3"}
+                                                        defaultChecked={diseno_forms.titulo.orientacion === "right" ? true && setTimeout(() => {
+                                                            cambiartitulo(3)
+                                                        }, 0) : false}
                                                         onChange={(e) =>
                                                             cambiartitulo(3)
                                                         }
@@ -574,6 +586,7 @@ function VerFormulario({formEditar}) {
                                             <Form.Select
                                                 aria-label='Default select example'
                                                 id='forma'
+                                                defaultValue={forma}
                                                 onChange={(e) =>
                                                     setforma(e.target.value)
                                                 }
@@ -600,6 +613,7 @@ function VerFormulario({formEditar}) {
                                             <Form.Select
                                                 aria-label='Default select example'
                                                 id='tamano'
+                                                defaultValue={tamano}
                                                 onChange={(e) =>
                                                     setTamano(e.target.value)
                                                 }
@@ -643,12 +657,17 @@ function VerFormulario({formEditar}) {
                                                         type='switch'
                                                         id='custom-switch2'
                                                         label='subtitulo de formulario'
+                                                        defaultChecked={diseno_forms.subtitulo.activo === "none" ? false && 
+                                                        setTimeout(() => {
+                                                            visibilidad1(false)
+                                                        }, 0) : true && setTimeout(() => {
+                                                            visibilidad1(true)
+                                                        }, 0)}
                                                         onChange={(e) =>
                                                             visibilidad1(
                                                                 e.target.checked
                                                             )
                                                         }
-                                                        defaultChecked
                                                         className='my-3'
                                                     />
                                                     <div className='mb-2'>
@@ -660,7 +679,9 @@ function VerFormulario({formEditar}) {
                                                         name='group11'
                                                         type={type}
                                                         id={"group11"}
-                                                        defaultChecked
+                                                        defaultChecked={diseno_forms.subtitulo.orientacion === "left" || diseno_forms.subtitulo.orientacion === "" ? true && setTimeout(() => {
+                                                            cambiartitulo1(1)
+                                                        }, 0) : false}
                                                         onChange={(e) =>
                                                             cambiartitulo1(1)
                                                         }
@@ -671,6 +692,9 @@ function VerFormulario({formEditar}) {
                                                         name='group11'
                                                         type={type}
                                                         id={"group12"}
+                                                        defaultChecked={diseno_forms.subtitulo.orientacion === "center" ? true && setTimeout(() => {
+                                                            cambiartitulo1(2)
+                                                        }, 0) : false}  
                                                         onChange={(e) =>
                                                             cambiartitulo1(2)
                                                         }
@@ -681,6 +705,9 @@ function VerFormulario({formEditar}) {
                                                         name='group11'
                                                         type={type}
                                                         id={"group13"}
+                                                        defaultChecked={diseno_forms.subtitulo.orientacion === "right" ? true && setTimeout(() => {
+                                                            cambiartitulo1(3)
+                                                        }, 0) : false} 
                                                         onChange={(e) =>
                                                             cambiartitulo1(3)
                                                         }
@@ -693,6 +720,7 @@ function VerFormulario({formEditar}) {
                                             <Form.Select
                                                 aria-label='Default select example'
                                                 id='forma1'
+                                                defaultValue={forma1}
                                                 onChange={(e) =>
                                                     setforma1(e.target.value)
                                                 }
@@ -719,6 +747,7 @@ function VerFormulario({formEditar}) {
                                             <Form.Select
                                                 aria-label='Default select example'
                                                 id='tamano1'
+                                                defaultValue={tamano1}
                                                 onChange={(e) =>
                                                     setTamano1(e.target.value)
                                                 }
@@ -818,6 +847,7 @@ function VerFormulario({formEditar}) {
                                                 name='group132'
                                                 type={"radio"}
                                                 id={"13"}
+                                                defaultChecked={texto2 === "left" ? true : false}
                                                 onChange={(e) =>
                                                     orientaciontexto1(1)
                                                 }
@@ -828,7 +858,7 @@ function VerFormulario({formEditar}) {
                                                 name='group132'
                                                 type={"radio"}
                                                 id={"14"}
-                                                defaultChecked
+                                                defaultChecked={texto2 === "center" ? true : false}
                                                 onChange={(e) =>
                                                     orientaciontexto1(2)
                                                 }
@@ -839,6 +869,7 @@ function VerFormulario({formEditar}) {
                                                 name='group132'
                                                 type={"radio"}
                                                 id={"15"}
+                                                defaultChecked={texto2 === "right" ? true : false}
                                                 onChange={(e) =>
                                                     orientaciontexto1(3)
                                                 }
@@ -852,6 +883,7 @@ function VerFormulario({formEditar}) {
                                             <Form.Select
                                                 aria-label='Default select example'
                                                 id='forma12'
+                                                defaultValue={forma2}
                                                 onChange={(e) =>
                                                     setforma2(e.target.value)
                                                 }
@@ -878,6 +910,7 @@ function VerFormulario({formEditar}) {
                                             <Form.Select
                                                 aria-label='Default select example'
                                                 id='tamano1'
+                                                defaultValue={tamano2}
                                                 onChange={(e) =>
                                                     setTamano2(e.target.value)
                                                 }
@@ -899,7 +932,7 @@ function VerFormulario({formEditar}) {
                                                     <Form.Control
                                                         type='number'
                                                         id='padding'
-                                                        defaultValue='6'
+                                                        defaultValue={padding.split("px")[0]}
                                                         min={"1"}
                                                         onChange={(e) =>
                                                             setPadding(
@@ -923,7 +956,7 @@ function VerFormulario({formEditar}) {
                                                     <Form.Control
                                                         type='number'
                                                         id='padding1'
-                                                        defaultValue='12'
+                                                        defaultValue={padding1.split("px")[0]}
                                                         min={"1"}
                                                         onChange={(e) =>
                                                             setPadding1(
@@ -946,7 +979,7 @@ function VerFormulario({formEditar}) {
                                                     <Form.Control
                                                         type='number'
                                                         id='border-colo'
-                                                        defaultValue='1'
+                                                        defaultValue={border.split("px")[0]}
                                                         min={"1"}
                                                         onChange={(e) =>
                                                             setBorder(
@@ -967,6 +1000,7 @@ function VerFormulario({formEditar}) {
                                             <Form.Select
                                                 aria-label='Default select example'
                                                 id='tborde'
+                                                defaultValue={tborder}
                                                 onChange={(e) =>
                                                     setTborder(e.target.value)
                                                 }
@@ -1030,7 +1064,7 @@ function VerFormulario({formEditar}) {
                                                     <Form.Control
                                                         type='number'
                                                         id='radius-borde'
-                                                        defaultValue='1'
+                                                        defaultValue={radius}
                                                         min={"1"}
                                                         onChange={(e) =>
                                                             setRadius(
@@ -1039,6 +1073,7 @@ function VerFormulario({formEditar}) {
                                                         }
                                                     />
                                                     <Form.Select
+                                                        defaultValue={rtipo}
                                                         onChange={(e) =>
                                                             setRtipo(
                                                                 e.target.value

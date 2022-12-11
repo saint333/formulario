@@ -57,6 +57,8 @@ function NuevoFormulario() {
     const [cborder, setCborder] = useState("#000000");
     const [radius, setRadius] = useState("0");
     const [rtipo, setRtipo] = useState("px");
+    
+
     const valores = [
         { id: 1, valor: "left" },
         { id: 2, valor: "center" },
@@ -193,7 +195,7 @@ function NuevoFormulario() {
                 },
             ],
         };
-        setJson(json);
+        setJson({json});
         setScrit(true);
     };
     const [scrit, setScrit] = useState(null);
@@ -317,7 +319,7 @@ function NuevoFormulario() {
                                             {btn}
                                         </button>
                                         <div className='editar'>
-                                            <FiEdit />
+                                           
                                         </div>
                                     </Card.Footer>
                                 </Card.Body>

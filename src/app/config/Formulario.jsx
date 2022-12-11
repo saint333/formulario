@@ -3,11 +3,11 @@ import { RUTA } from "../../config/routes/paths";
 import "./forms.css";
 
 export default function Formulario(props) {
-    console.log(JSON.stringify(props.json));
-    const guardar = async () => {
+    console.log(props.json);
+    const guardar = async (data,tipo) => {
         await fetch(`${RUTA}api/forms`,{
-            method: "POST",
-            body: JSON.stringify(props.json),
+            method: tipo,
+            body: JSON.stringify(data),
             headers : {
               "Accept": "*/*",
               "User-Agent": "Thunder Client (https://www.thunderclient.com)",
@@ -15,7 +15,11 @@ export default function Formulario(props) {
              }
         })
     }
-    guardar()
+    if (props.json.actualizar) {
+        
+        guardar(props.json.json,"PUT")
+    }
+    guardar(props.json.json,"POST")
     const vista = useRef();
     console.log(vista);
     setTimeout(() => {
