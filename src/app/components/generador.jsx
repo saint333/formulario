@@ -5,27 +5,22 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import Accordion from "react-bootstrap/Accordion";
 import {FaUserCircle, FaUser, FaCheckSquare} from "react-icons/fa"
 import { IoTextOutline} from "react-icons/io5";
-import { MdOutlineShortText, MdRadioButtonChecked, MdOutlineAlternateEmail, MdOutlineDriveFolderUpload, MdOutlineImage} from "react-icons/md";
+import { MdOutlineShortText, MdRadioButtonChecked, MdOutlineAlternateEmail} from "react-icons/md";
 import { GrTextAlignFull, GrCheckboxSelected } from "react-icons/gr";
 import { TiSortNumerically } from "react-icons/ti";
 import { BsPhone, BsTelephone,BsCalendarDate, BsFillMenuButtonWideFill, BsCodeSlash } from "react-icons/bs";
 import { BiTime } from "react-icons/bi";
 
-// import shortid from "shortid";
-// shortid.characters(
-//     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
-// );
-
 const esquema = [
     {
         tipo: "nombre",
         type: "text",
-        input: `<label><span>Escribe tu nombre</span><input type="text" name="Nombre" placeholder="escribe tu nombre" pattern='[a-zA-ZÀ-ÖØ-öø-ÿ]+\.?(( |\-)[a-zA-ZÀ-ÖØ-öø-ÿ]+\.?)*'></label>`
+        input: `<label><span>Escribe tu nombre</span><input type="text" name="Nombre" placeholder="escribe tu nombre" pattern='[a-zA-ZÀ-ÖØ-öø-ÿ]+ ?(( | )[a-zA-ZÀ-ÖØ-öø-ÿ]+ ?)*'></label>`
     },
     {
         tipo: "apellido",
         type: "text",
-        input:`<label><span>Escribe tu apellido</span><input type="text" name="Apellido" placeholder="escribe tu apellido" pattern='[a-zA-ZÀ-ÖØ-öø-ÿ]+\.?(( |\-)[a-zA-ZÀ-ÖØ-öø-ÿ]+\.?)*'/></label>`
+        input:`<label><span>Escribe tu apellido</span><input type="text" name="Apellido" placeholder="escribe tu apellido" pattern='[a-zA-ZÀ-ÖØ-öø-ÿ]+ ?(( | )[a-zA-ZÀ-ÖØ-öø-ÿ]+ ?)*'/></label>`
     },
     {
         tipo: "texto",
@@ -124,6 +119,7 @@ const esquema = [
         input: '<div class=html>Insertar html</div>'
     },
 ]
+
 export default function Generador(props) {
     const {items} = props
     const [show, setShow] = useState(false);
@@ -216,7 +212,7 @@ export default function Generador(props) {
                                 <Button variant="light" className="mb-3 w-100 d-flex align-items-center gap-3" onClick={()=>armar("lista")}><BsFillMenuButtonWideFill />Select</Button>
                             </Accordion.Body>
                         </Accordion.Item>
-                        <Accordion.Item eventKey='7'>
+                        {/* <Accordion.Item eventKey='7'>
                             <Accordion.Header>
                                 Tipo archivo
                             </Accordion.Header>
@@ -224,7 +220,7 @@ export default function Generador(props) {
                                 <Button variant="light" className="mb-3 w-100 d-flex align-items-center gap-3" onClick={()=>armar("archivos")}><MdOutlineDriveFolderUpload />Subir archivos</Button>
                                 <Button variant="light" className="mb-3 w-100 d-flex align-items-center gap-3" onClick={()=>armar("imagenes")}><MdOutlineImage />Subir imagenes</Button> 
                             </Accordion.Body>
-                        </Accordion.Item>
+                        </Accordion.Item> */}
                         <Accordion.Item eventKey='8'>
                             <Accordion.Header>
                                 Tipo html

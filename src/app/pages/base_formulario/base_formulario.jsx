@@ -32,9 +32,7 @@ function BaseFormulario(params) {
 }
 
 function VerFormulario({formEditar}) {
-    console.log(formEditar);
     const [diseno_forms] = JSON.parse(formEditar.diseno_general)
-    console.log(diseno_forms);
     const { autenticado } = useAuthContext();
     const contenido = useRef();
     const formulario = useRef();

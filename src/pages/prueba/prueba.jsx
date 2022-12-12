@@ -98,10 +98,8 @@ function Prueba() {
             data.body.forEach((imagen) => {
                 const img = document.createElement("img");
                 img.src = imagen.foto;
-                // let id = imagen.idfotos_usuarios;
                 let id = imagen.idfoto_usuario;
                 img.crossOrigin = "anonymos";
-                console.log(img);
                 compararImagen(img, id);
             });
             let matche;
@@ -131,9 +129,7 @@ function Prueba() {
                         setBotones("d-flex");
                         setShow(true);
                     }
-                    console.log(matche,id_imagen);
                 } catch (e) {
-                    console.log(e);
                     if (descriptor.length === 0) {
                         setShow(true);
                         setBotones("d-flex");
@@ -143,11 +139,9 @@ function Prueba() {
                     setTimeout(() => {
                         setAlerta("d-none");
                     }, 2500);}
-                    console.log(descriptor);
+                    
                 }
             }, 1000);
-            // setBotones("d-flex");
-            // setShow(true);
         }
     };
     async function captura() {
@@ -252,7 +246,6 @@ function Prueba() {
             setVertexto("Registrar");
             let mensaje = response.body.includes("correo_UNIQUE") ? "correo" : response.body.includes("dni_UNIQUE") ? "dni": response.body.includes("telefono_UNIQUE") ? "celular" : ""
             seterror({msg: mensaje, clase: 'unset'})
-            console.log(response);
         }
     };
 

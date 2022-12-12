@@ -6,7 +6,6 @@ import { PRIVADO, RUTA } from "../../../config/routes/paths";
 function Logou() {
   const { logout, autenticado } = useAuthContext();
   const CerrarSesion = async() => {
-    console.log(autenticado.dni);
     await fetch(
       `${RUTA}api/user/sesion/${autenticado.dni}`,
       {

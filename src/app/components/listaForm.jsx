@@ -71,10 +71,10 @@ export default function ListaFormularios() {
                 <Table responsive>
                     <thead>
                         <tr>
-                            <th className="text-truncate">ID</th>
+                            <th className="text-truncate d-none d-md-block">N°</th>
                             <th className="text-truncate">Formulario</th>
-                            <th className="text-truncate">Fecha de creación</th>
-                            <th className="text-truncate">N° de ingresos</th>
+                            <th className="text-truncate d-none d-md-block">Fecha de creación</th>
+                            <th className="text-truncate">N° de registros</th>
                             <th className="text-truncate"></th>
                         </tr>
                     </thead>
@@ -83,8 +83,9 @@ export default function ListaFormularios() {
                             <tr
                                 key={element.idformularios}
                                 id={element.idformularios}
+                                
                             >
-                                <td className="text-truncate">{index + 1}</td>
+                                <td className="text-truncate d-none d-md-block">{index + 1}</td>
                                 <td
                                     style={{ cursor: "pointer" }}
                                     onClick={() =>
@@ -94,7 +95,7 @@ export default function ListaFormularios() {
                                 >
                                     {element.nombre_formulario}
                                 </td>
-                                <td className="text-truncate">{element.fecha_creacion.split("T")[0]}</td>
+                                <td className="text-truncate d-none d-md-block">{element.fecha_creacion.split("T")[0]}</td>
                                 <td>
                                     <span
                                         onClick={() =>

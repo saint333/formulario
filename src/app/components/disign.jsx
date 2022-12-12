@@ -10,10 +10,8 @@ function Diseno(prosp) {
     const item = detalle.item;
     const [show, setShow] = useState(prosp.estado);
     const id = detalle.id
-    console.log(detalle);
     const handleClose = (tipo) => {
         if (tipo === "eliminar") {
-            // document.getElementById(id).remove()
             const index = detalle.index
             setShow(false);
             prosp.cerrar(null,index,tipo);

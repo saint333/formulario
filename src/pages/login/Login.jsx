@@ -158,7 +158,6 @@ function Login() {
                         detections.descriptor
                     );
                     let id_imagen = betsMatch.label;
-                    console.log(betsMatch);
                     if (id_imagen === "unknown") {
                         closeWebcam();
                         setAlerta({
@@ -262,7 +261,7 @@ function Login() {
                                 style={{
                                     borderRadius: "10px",
                                     maxWidth: "100%",
-                                    height: "auto"
+                                    height: "100%"
                                 }}
                             />
                             <canvas

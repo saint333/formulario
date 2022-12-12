@@ -3,7 +3,6 @@ import { RUTA } from "../../config/routes/paths";
 import "./forms.css";
 
 export default function Formulario(props) {
-    console.log(props.json);
     const guardar = async (data,tipo) => {
         await fetch(`${RUTA}api/forms`,{
             method: tipo,
@@ -21,9 +20,8 @@ export default function Formulario(props) {
     }
     guardar(props.json.json,"POST")
     const vista = useRef();
-    console.log(vista);
     setTimeout(() => {
-        vista.current.innerHTML = props.json.estructura;
+        vista.current.innerHTML = props.json.json.estructura;
     }, 1000);
     let ruta = window.location.origin
     return (
@@ -35,7 +33,7 @@ export default function Formulario(props) {
                           if (window.form === undefined) {
                             window.form = [];
                         }
-                        window.form.push(${props.json.id});
+                        window.form.push(${props.json.json.id});
                     </script>`}
                     <br />
                     {`<script src="${ruta}/forms/form.js"></script>`}

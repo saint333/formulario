@@ -8,23 +8,12 @@ import Accordion from "react-bootstrap/Accordion";
 import Editor from "@monaco-editor/react";
 import Generador from "../../components/generador";
 import { FiEdit } from "react-icons/fi";
-import shortid from "shortid";
 import Diseno from "../../components/disign";
 import { useAuthContext } from "../../../config/authentication/authentication";
 import Formulario from "../../config/Formulario";
-shortid.characters(
-    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
-);
-// import Contenedor from "../../components/contenedor";
-// import MyForm from "../../config/Formulario";
-// import { Provider } from 'react-redux';
-// import store from '../../components/store';
-// import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 function NuevoFormulario() {
     const { autenticado } = useAuthContext();
-    // let i = new MyForm()
-    // console.log(i.name = "jo");
     const contenido = useRef();
     const formulario = useRef();
     const [tiutlo, setTitulo] = useState("Nombre del formulario");
@@ -126,17 +115,11 @@ function NuevoFormulario() {
     };
     const [estado, setEstado] = useState({ estado: false });
     const modalce = (datos, posicion,tipo) => {
-        console.log(tipo,datos,posicion);
         if (tipo === "eliminar") {
             let copyListItems = [...inputs];
-            console.log(inputs);
-            console.log(copyListItems);
             copyListItems.splice(posicion,1)
             setInputs(copyListItems);
-            console.log(inputs);
-            console.log(copyListItems);
         } else {
-            console.log("hola");
             const copyListItems = [...inputs];
             copyListItems.splice(posicion,1,datos)
             setInputs(copyListItems);
