@@ -14,6 +14,10 @@ aside.sc-gswNZR.djZVNf.sidebar.collapsed, aside.sc-gswNZR.kwGAlS.sidebar.collaps
     top: 70px;
 }
 
+p{
+    margin: 0;
+}
+
 aside.sc-gswNZR.bOQEtf.sidebar, aside.sc-gswNZR.Ffgmy.sidebar {
     position: sticky;
     height: 85vh;

@@ -1,73 +1,59 @@
 import Box from "@mui/material/Box";
-import { DataGrid, GridActionsCellItem, GridToolbar  } from "@mui/x-data-grid";
-import { useCallback, useState } from "react";
-import { MdDeleteOutline } from "react-icons/md";
-import { FiEdit } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { GridLinkOperator , DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { useState } from "react";
+import { useEffect } from "react";
+import { RUTA } from "../../config/routes/paths";
+// import ReactExport from "react-export-excel";
 
-function Registrosformularios({ id }) {
-    console.log(id);
+// const ExcelFile = ReactExport.ExcelFile;
+// const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+// const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+
+const Registrosformularios = ({ id }) => {
+    const [data, setData] = useState(null);
+    useEffect(() => {
+        const llamar = async () => {
+            const response = await fetch(`${RUTA}api/forms/obtener/${id}`);
+            const objeto = await response.json();
+            setData(objeto.body[0]);
+        };
+        llamar();
+    }, [id]);
+    return <>{data === null ? "" : <ObtenerFormularios data={data} />}</>;
+};
+
+function ObtenerFormularios({ data }) {
     const [pageSize, setPageSize] = useState(5);
-    // const [checkboxSelection, setCheckboxSelection] = useState(true);
 
-    const rows = [
-        { id: 1, col1: "Hello", col2: "World", col3: "10" },
-        { id: 3, col1: "Material UI", col2: "is amazing", col3: "3" },
-    ];
+    const rows = JSON.parse(data.campos_registro) || [];
+    let dataRow = JSON.parse(data.campos_registro) || []
+    rows.map((elemen, index) => (elemen["index"] = index));
+    console.log(dataRow);
     const [row, setRow] = useState(rows);
-    const deleteUser = useCallback(
-        (id) => () => {
-            setTimeout(() => {
-                setRow((prevRows) => prevRows.filter((row) => row.id !== id));
-            });
-        },
-        []
-    );
-    const editarUser = useCallback(
-        (id) => () => {
-            setTimeout(() => {
-                // setRow((prevRows) => prevRows.filter((row) => row.id !== id));
-                console.log(id);
-            });
-        },
-        []
-    );
-    const columns = [
-        { field: "id", hide: false },
-        { field: "col1", headerName: "Formulario", width: 300 },
-        { field: "col2", headerName: "Fecha de Creación", width: 300 },
-        {
-            field: "col3",
-            headerName: "N° de Ingresos",
-            width: 200,
-            renderCell: (params) => (
-                <Link to={`registros/${params.value}`}>{params.value}</Link>
-            ),
-        },
-        {
-            field: "actions",
-            type: "actions",
-            width: 200,
-            getActions: (params) => [
-                <GridActionsCellItem
-                    icon={<MdDeleteOutline style={{ fontSize: "20px" }} />}
-                    label='Delete'
-                    onClick={deleteUser(params.id)}
-                />,
-                <GridActionsCellItem
-                    icon={<FiEdit style={{ fontSize: "20px" }} />}
-                    label='Editar'
-                    onClick={editarUser(params)}
-                />,
-            ],
-        },
-    ];
-
+    let columns;
+    if (row.length > 0) {
+        columns = Object.entries(row.at(-1))
+            .map((el) => el[0])
+            .map((fiel) =>
+                fiel === "index" ? { field: fiel, hide: true,  hideable: false } : fiel === "fecha" ? { field: fiel,type: 'dateTime',  hideable: false, valueGetter: ({ value }) => value && new Date(value),} : { field: fiel, }
+            );
+    } else {
+        columns = [];
+    }
     return (
         <div>
+            {/* <ExcelFile elemen={<button>EXCEL</button>}>
+                <ExcelSheet data={dataRow} name="Employees" >
+                    <ExcelColumn label="Name" value="name"/>
+                    <ExcelColumn label="Wallet Money" value="amount"/>
+                    <ExcelColumn label="Gender" value="sex"/>
+                    <ExcelColumn label="Marital Status"
+                                 value={(col) => col.is_married ? "Married" : "Single"}/>
+                </ExcelSheet>
+            </ExcelFile> */}
             <Box sx={{ width: "100%" }}>
                 <DataGrid
-                    autoHeight
+                    autoHeight                   
                     rows={row}
                     columns={columns}
                     pageSize={pageSize}
@@ -76,7 +62,60 @@ function Registrosformularios({ id }) {
                     pagination
                     disableSelectionOnClick
                     disableColumnMenu
-                    components={{ Toolbar: GridToolbar }} 
+                    components={{ Toolbar: GridToolbar }}
+                    getRowId={(row) => row.index}
+                    componentsProps={{
+                        toolbar: {
+                            showQuickFilter: true,
+                            quickFilterProps: { debounceMs: 500 },
+                          },
+                        filterPanel: {
+                          // Force usage of "And" operator
+                          linkOperators: [GridLinkOperator.And],
+                          // Display columns by ascending alphabetical order
+                          columnsSort: 'asc',
+                          filterFormProps: {
+                            // Customize inputs by passing props
+                            linkOperatorInputProps: {
+                              variant: 'outlined',
+                              size: 'small',
+                            },
+                            columnInputProps: {
+                              variant: 'outlined',
+                              size: 'small',
+                              sx: { mt: 'auto' },
+                            },
+                            operatorInputProps: {
+                              variant: 'outlined',
+                              size: 'small',
+                              sx: { mt: 'auto' },
+                            },
+                            valueInputProps: {
+                              InputComponentProps: {
+                                variant: 'outlined',
+                                size: 'small',
+                              },
+                            },
+                            deleteIconProps: {
+                              sx: {
+                                '& .MuiSvgIcon-root': { color: '#d32f2f' },
+                              },
+                            },
+                          },
+                          sx: {
+                            // Customize inputs using css selectors
+                            '& .MuiDataGrid-filterForm': { p: 2 },
+                            '& .MuiDataGrid-filterForm:nth-child(even)': {
+                              backgroundColor: (theme) =>
+                                theme.palette.mode === 'dark' ? '#444' : '#f5f5f5',
+                            },
+                            '& .MuiDataGrid-filterFormLinkOperatorInput': { mr: 2 },
+                            '& .MuiDataGrid-filterFormColumnInput': { mr: 2, width: 150 },
+                            '& .MuiDataGrid-filterFormOperatorInput': { mr: 2 },
+                            '& .MuiDataGrid-filterFormValueInput': { width: 200 },
+                          },
+                        },
+                      }}
                 />
             </Box>
         </div>

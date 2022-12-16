@@ -1,4 +1,4 @@
-const data = [];
+let data = [];
 document.addEventListener("DOMContentLoaded", async () => {
     window.form.map(async (element, index) => {
         let div = document.createElement("div");
@@ -12,10 +12,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 const obtenerFormularios = async (id) => {
     const response = await fetch(
-        `http://localhost:9000/api/forms/obtener/${id}`
+        `https://api-formularios.gnxcode.dev/api/forms/obtener/${id}`
     );
     const objeto = await response.json();
-    console.log(JSON.parse(objeto.body[0].campos_registro));
     return objeto;
 };
 
@@ -29,9 +28,9 @@ document.addEventListener("submit", async (e) => {
     let ji = new FormData(e.target);
     ji = [...ji.entries()];
     let input = Object.fromEntries(ji);
-    console.log(ji);
+    input["fecha"] = new Date()
     registros.push(input);
-    const datas = await fetch(`http://localhost:9000/api/forms/agregar/`, {
+    const datas = await fetch(`https://api-formularios.gnxcode.dev/api/forms/agregar/`, {
         method: "POST",
         body: JSON.stringify({
             cantidad: data.find(
@@ -49,10 +48,15 @@ document.addEventListener("submit", async (e) => {
         }
     });
     const response = await datas.json();
-    console.log(response);
+    if (response.estado) {
+        let nuevo = await obtenerFormularios(e.target.parentElement.id)
+        let index = data.findIndex(e => e.body[0].idformularios === nuevo.body[0].idformularios)
+        data.splice(index,1,nuevo)
+        e.target.reset()
+    }
 });
 
-// function verificarMarcado(e){
-//   console.log(e);
-//   console.log(this);
-// }
+function verificarMarcado(e){
+  console.log(e);
+  console.log(this);
+}
