@@ -3,11 +3,11 @@ import { GridLinkOperator , DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useEffect } from "react";
 import { RUTA } from "../../config/routes/paths";
-// import ReactExport from "react-export-excel";
+import ReactExport from "react-export-excel";
 
-// const ExcelFile = ReactExport.ExcelFile;
-// const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-// const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 const Registrosformularios = ({ id }) => {
     const [data, setData] = useState(null);
@@ -28,8 +28,8 @@ function ObtenerFormularios({ data }) {
     const rows = JSON.parse(data.campos_registro) || [];
     let dataRow = JSON.parse(data.campos_registro) || []
     rows.map((elemen, index) => (elemen["index"] = index));
-    console.log(dataRow);
-    const [row, setRow] = useState(rows);
+    
+    const [row] = useState(rows);
     let columns;
     if (row.length > 0) {
         columns = Object.entries(row.at(-1))
@@ -40,17 +40,19 @@ function ObtenerFormularios({ data }) {
     } else {
         columns = [];
     }
+    console.log(dataRow)
+    console.log(columns);
     return (
         <div>
-            {/* <ExcelFile elemen={<button>EXCEL</button>}>
-                <ExcelSheet data={dataRow} name="Employees" >
-                    <ExcelColumn label="Name" value="name"/>
-                    <ExcelColumn label="Wallet Money" value="amount"/>
-                    <ExcelColumn label="Gender" value="sex"/>
-                    <ExcelColumn label="Marital Status"
-                                 value={(col) => col.is_married ? "Married" : "Single"}/>
+            <ExcelFile filename={data.nombre_formulario} element={<button className="btn btn-sami mb-3">EXCEL</button>}>
+                <ExcelSheet data={dataRow} name={data.nombre_formulario} >
+                  {
+                    columns.filter(el => el.field !== "index").map(elemen => {
+                        return <ExcelColumn label={elemen.field} value={elemen.field}/>
+                    })
+                  }
                 </ExcelSheet>
-            </ExcelFile> */}
+            </ExcelFile>
             <Box sx={{ width: "100%" }}>
                 <DataGrid
                     autoHeight                   
